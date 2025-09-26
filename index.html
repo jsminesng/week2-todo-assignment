@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 2 과제: 나만의 Todo 리스트</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 font-sans min-h-screen">
+    <!-- 전체 컨테이너 -->
+    <div class="max-w-2xl mx-auto p-6">
+      <!-- 헤더 -->
+      <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-blue-600 mb-2">
+          📝 나만의 Todo 리스트
+        </h1>
+        <p class="text-gray-600">
+          Week 2 과제 - HTML, CSS, JavaScript 종합 실습
+        </p>
+      </header>
+
+      <!-- Todo 추가 영역 -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">할일 추가하기</h2>
+
+        <!-- 입력 폼 -->
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="todoInput"
+            placeholder="새로운 할일을 입력하세요..."
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+          />
+
+          <button
+            onclick="addTodo()"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+          >
+            추가
+          </button>
+        </div>
+      </div>
+
+      <!-- Todo 목록 영역 -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">할일 목록</h2>
+
+        <!-- Todo 항목들이 여기에 추가됩니다 -->
+        <div id="todoList" class="space-y-2">
+          <!-- 예시 Todo 항목 (JavaScript로 동적 생성할 예정) -->
+          <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <input type="checkbox" class="w-5 h-5 text-blue-600" />
+            <span class="flex-1 text-gray-700">예시: JavaScript 공부하기</span>
+            <button class="text-red-500 hover:text-red-700 px-2 py-1 rounded">
+              삭제
+            </button>
+          </div>
+        </div>
+
+        <!-- 목록이 비어있을 때 메시지 -->
+        <div id="emptyMessage" class="text-center text-gray-500 py-8 hidden">
+          아직 할일이 없습니다. 새로운 할일을 추가해보세요! 🎯
+        </div>
+      </div>
+
+      <!-- 통계 정보 (선택 과제) -->
+      <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">📊 진행 현황</h3>
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <div id="totalCount" class="text-2xl font-bold text-blue-600">
+              0
+            </div>
+            <div class="text-sm text-gray-500">전체</div>
+          </div>
+          <div>
+            <div id="completedCount" class="text-2xl font-bold text-green-600">
+              0
+            </div>
+            <div class="text-sm text-gray-500">완료</div>
+          </div>
+          <div>
+            <div id="remainingCount" class="text-2xl font-bold text-orange-600">
+              0
+            </div>
+            <div class="text-sm text-gray-500">남은 일</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 과제 안내 -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
+        <h3 class="text-lg font-semibold text-blue-800 mb-3">
+          🎯 과제 요구사항
+        </h3>
+        <div class="space-y-2 text-sm text-blue-700">
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-blue-500 rounded"></span>
+            <span>✅ <strong>필수:</strong> 할일 추가 기능</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-blue-500 rounded"></span>
+            <span>✅ <strong>필수:</strong> 할일 삭제 기능</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-blue-500 rounded"></span>
+            <span>✅ <strong>필수:</strong> 완료 체크/해제 기능</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-blue-500 rounded"></span>
+            <span>✅ <strong>필수:</strong> LocalStorage에 데이터 저장</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-orange-500 rounded"></span>
+            <span
+              >🟡 <strong>선택:</strong> 전체 삭제, 필터링 등 추가 기능</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 개발 팁 -->
+      <div class="bg-green-50 border border-green-200 rounded-lg p-6 mt-6">
+        <h3 class="text-lg font-semibold text-green-800 mb-3">💡 개발 팁</h3>
+        <div class="space-y-2 text-sm text-green-700">
+          <p>
+            • <strong>DOM 조작:</strong> document.getElementById(),
+            querySelector() 활용
+          </p>
+          <p>• <strong>이벤트:</strong> onclick, addEventListener 사용</p>
+          <p>
+            • <strong>저장소:</strong> localStorage.setItem(), getItem() 활용
+          </p>
+          <p>• <strong>배열:</strong> push(), splice(), filter() 메서드 활용</p>
+          <p>• <strong>디버깅:</strong> console.log()로 값 확인하기</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript 영역 -->
+    <script>
+      // 전역 변수
+      let todos = []; // 할일 목록을 저장할 배열
+
+      // 페이지 로드시 실행
+      window.onload = function () {
+        // 💡 여기에 LocalStorage에서 데이터 불러오는 코드 작성
+        console.log("Todo 앱이 시작되었습니다!");
+        console.log(
+          "💡 과제: LocalStorage에서 저장된 할일들을 불러와 화면에 표시하세요"
+        );
+
+        // 예시 데이터 (실제로는 LocalStorage에서 불러와야 함)
+        loadTodos();
+        renderTodos();
+      };
+
+      // 할일 추가 함수
+      function addTodo() {
+        // 💡 과제: 입력값을 가져와서 todos 배열에 추가하고, 화면에 표시하는 코드 작성
+        // 1. input 요소에서 값 가져오기
+        const todoInput = document.getElementById("todoInput");
+        // 2. 빈 값 체크하기
+        const value = todoInput.value.trim();
+        // 3. todos 배열에 새 항목 추가
+        todos.push({ text: value, completed: false });
+        // 4. LocalStorage에 저장
+        saveTodos();
+        // 5. 화면 다시 그리기
+        renderTodos();
+        // 6. input 값 초기화
+        todoInput.value = "";
+        todoInput.focus();
+      }
+
+      // 할일 삭제 함수
+      function deleteTodo(index) {
+        // 💡 과제: 특정 인덱스의 할일을 삭제하는 코드 작성
+        // 1. todos 배열에서 해당 인덱스 제거
+        todos.splice(index, 1);
+        // 2. LocalStorage에 저장
+        saveTodos();
+        // 3. 화면 다시 그리기
+        renderTodos();
+      }
+
+      // 할일 완료 토글 함수
+      function toggleTodo(index) {
+        // 💡 과제: 특정 인덱스의 할일 완료 상태를 바꾸는 코드 작성
+        // 1. todos[index].completed = !todos[index].completed
+        todos[index].completed = !todos[index].completed;
+        // 2. LocalStorage에 저장
+        saveTodos();
+        // 3. 화면 다시 그리기
+        renderTodos();
+      }
+
+      // LocalStorage에서 데이터 불러오기
+      function loadTodos() {
+        // 💡 과제: LocalStorage에서 'todos' 키로 저장된 데이터 불러오기
+        const savedTodos = localStorage.getItem("todos");
+        if (savedTodos) {
+          todos = JSON.parse(savedTodos);
+        }
+      }
+
+      // LocalStorage에 데이터 저장하기
+      function saveTodos() {
+        // 💡 과제: todos 배열을 LocalStorage에 저장하기
+        localStorage.setItem("todos", JSON.stringify(todos));
+      }
+
+      // 화면에 할일 목록 표시하기
+      function renderTodos() {
+        // 💡 과제: todos 배열의 내용을 HTML로 만들어서 화면에 표시
+        const todoList = document.getElementById("todoList");
+
+        // 1. todoList.innerHTML = ''; 로 기존 내용 지우기
+        todoList.innerHTML = "";
+        // 2. todos 배열을 반복하면서 HTML 생성 각 항목마다 체크박스, 텍스트, 삭제 버튼 포함
+
+        todos.forEach((todo, index) => {
+          const div = document.createElement("div");
+          div.className = "flex items-center gap-3 p-3 bg-gray-50 rounded-lg";
+          //체크박스
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.className = "w-5 h-5 text-blue-600";
+          checkbox.checked = todo.completed;
+          checkbox.onclick = function () {
+            toggleTodo(index);
+          };
+
+          //텍스트
+          const span = document.createElement("span");
+          span.className = "flex-1 text-gray-700";
+          span.textContent = todo.text;
+          if (todo.completed) {
+            span.style.textDecoration = "line-through";
+            span.style.color = "gray";
+          }
+
+          //삭제버튼
+          const deleteButton = document.createElement("button");
+          deleteButton.className =
+            "text-red-500 hover:text-red-700 px-2 py-1 rounded";
+          deleteButton.textContent = "삭제";
+          deleteButton.onclick = function () {
+            deleteTodo(index);
+          };
+          //
+          // 4. onclick 이벤트로 toggleTodo, deleteTodo 함수 연결
+          div.appendChild(checkbox);
+          div.appendChild(span);
+          div.appendChild(deleteButton);
+          todoList.appendChild(div);
+        });
+        // 통계 업데이트
+        updateStats();
+
+        // 5. 목록이 비어있으면 안내 메시지 표시
+        const emptyMessage = document.getElementById("emptyMessage");
+        if (todos.length === 0) {
+          emptyMessage.classList.remove("hidden");
+        } else {
+          emptyMessage.classList.add("hidden");
+        }
+      }
+
+      // 통계 정보 업데이트
+      function updateStats() {
+        // 💡 선택 과제: 전체, 완료, 남은 할일 개수 계산해서 표시
+        const total = todos.length;
+        const completed = todos.filter((todo) => todo.completed).length;
+        const remaining = total - completed;
+
+        document.getElementById("totalCount").textContent = total;
+        document.getElementById("completedCount").textContent = completed;
+        document.getElementById("remainingCount").textContent = remaining;
+      }
+
+      // Enter 키로 할일 추가
+      document.addEventListener("DOMContentLoaded", function () {
+        const todoInput = document.getElementById("todoInput");
+        todoInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            addTodo();
+          }
+        });
+      });
+
+      // 개발자 도구 안내
+      console.log("🎉 Todo 앱 개발을 시작합니다!");
+      console.log(
+        "💡 개발자 도구(F12)를 열어서 console.log() 메시지들을 확인하세요"
+      );
+      console.log(
+        "📚 필요한 함수들: addTodo, deleteTodo, toggleTodo, loadTodos, saveTodos, renderTodos"
+      );
+      console.log("🚀 하나씩 완성해나가면서 기능을 구현해보세요!");
+    </script>
+  </body>
+</html>
